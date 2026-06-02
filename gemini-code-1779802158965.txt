@@ -1,0 +1,68 @@
+flowchart TB
+    %% Definición de Estilos y Clases %%
+    classDef CapaDato fill:#eef2f7,stroke:#10b981,stroke-width:2px,color:#0f172a;
+    classDef CapaCognitiva fill:#eef2f7,stroke:#14b8a6,stroke-width:2px,color:#0f172a;
+    classDef CapaCalibracion fill:#eef2f7,stroke:#3b82f6,stroke-width:2px,color:#0f172a;
+    classDef CapaSeguridad fill:#eef2f7,stroke:#ef4444,stroke-width:2px,color:#0f172a;
+    classDef CapaEjecucion fill:#eef2f7,stroke:#6366f1,stroke-width:2px,color:#0f172a;
+
+    %% Nodos de Capa de Datos %%
+    subgraph Capa_Dato
+        A --> B
+        B --> C
+        C --> D
+        D --> E
+        E --> F
+        F1 & F2 & F3[Memoria Arquitectónica: Perfil 360 Graph] --> F
+    end
+    class Capa_Dato,A,B,C,D,E,F,F1,F2,F3 CapaDato;
+
+    %% Nodos de Capa Cognitiva %%
+    subgraph Capa_Cognitiva
+        G[Mensajería UI / Evento Plataforma] --> H
+        H --> I
+        I --> J{¿Capacidad Existente?}
+        J -- Sí --> K
+        J -- No --> L
+        L --> L1
+        L --> L2
+        L1 --> L3
+        L3 --> L4
+        L2 --> L5
+        L5 --> L6
+        L4 & L6 --> K
+    end
+    class Capa_Cognitiva,G,H,I,J,K,L,L1,L2,L3,L4,L5,L6 CapaCognitiva;
+
+    %% Nodos de Capa de Calibración %%
+    subgraph Capa_Calibracion
+        K --> M
+        M --> N
+        N --> O
+        O --> O1
+        O --> O2
+        O1 & O2 --> P[Expected Calibration Error Evaluation - ECE]
+        P --> Q{¿Confianza Calibrada >= 99.9%?}
+    end
+    class Capa_Calibracion,M,N,O,O1,O2,P,Q CapaCalibracion;
+
+    %% Nodos de Capa de Seguridad %%
+    subgraph Capa_Seguridad
+        Q -- No --> R
+        Q -- Sí --> S
+        S --> T
+        T --> U
+    end
+    class Capa_Seguridad,R,S,T,U CapaSeguridad;
+
+    %% Nodos de Capa de Ejecución %%
+    subgraph Capa_Ejecucion
+        U --> V[Orquestación Asíncrona: Queueable Apex]
+        V --> W
+        W --> X
+    end
+    class Capa_Ejecucion,V,W,X CapaEjecucion;
+
+    %% Flujos de Contexto Cruzado %%
+    F3 -->|Grounding Contextual| I
+    X -->|Actualizar Telemetría| C

@@ -1,0 +1,29 @@
+graph TD
+    %% Estilos
+    classDef ui fill:#e0f2fe,stroke:#0284c7,stroke-width:2px;
+    classDef apex fill:#fef08a,stroke:#ca8a04,stroke-width:2px;
+    classDef data fill:#dcfce7,stroke:#16a34a,stroke-width:2px;
+    classDef audit fill:#fee2e2,stroke:#dc2626,stroke-width:2px;
+
+    %% Nodos
+    User((Usuario / CSO)) -->|Ingresa Prompt Natural| LWC
+    
+    subgraph Frontend Nativo
+    LWC[LWC: alroDashboard <br/> Neuro-Glassmorphism]:::ui
+    end
+
+    subgraph Backend Salesforce
+    LWC -->|Llama @AuraEnabled| Apex{Apex: AgentController}:::apex
+    
+    Apex -->|1. Consulta SOSL| Knowledge[(Salesforce Knowledge)]:::data
+    Knowledge -->|Devuelve Verdad Absoluta| Apex
+    
+    Apex -->|2. Extrae Métricas| DataCloud[(Data Cloud / CRM)]:::data
+    DataCloud -->|Devuelve Datos Reales| Apex
+    
+    Apex -->|3. COMMIT: Registra Acción| Audit[(Audit_Event__c)]:::audit
+    end
+
+    %% Retorno
+    Apex -->|Devuelve Payload JSON| LWC
+    LWC -->|Renderiza Gráficos Recharts/SLDS| User

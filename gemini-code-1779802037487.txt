@@ -1,0 +1,35 @@
+graph TD
+    %% Entradas de Usuario
+    User((Usuario/Director)) -- "Lenguaje Natural" --> Agentforce[Agentforce \n(Agente Único)]
+    
+    %% Capa de Inteligencia y Enrutamiento (Topic Classifier)
+    Agentforce -- "Intención: Ventas" --> TopicVentas[Topic: Ventas]
+    Agentforce -- "Intención: Soporte" --> TopicSoporte[Topic: Soporte]
+    Agentforce -- "Intención: Combinada" --> TopicMixto[Topic: Combinado]
+    Agentforce -- "Consulta KPI" --> RAG[Data Cloud & Search \n(Knowledge Articles)]
+    
+    %% Capa de Acción (Flows)
+    TopicVentas -- "Ejecuta" --> FlowVentas[Flow: Actualizar Dash. Ventas]
+    TopicSoporte -- "Ejecuta" --> FlowSoporte[Flow: Actualizar Dash. Soporte]
+    TopicMixto -- "Ejecuta" --> FlowMixto[Flow: Tablero Unificado]
+    
+    %% Capa de Datos
+    FlowVentas -- "SOQL" --> ObjOpp[(Objeto: Opportunities)]
+    FlowSoporte -- "SOQL" --> ObjCase[(Objeto: Cases)]
+    
+    %% Capa de Trazabilidad y Visualización
+    FlowVentas --> EventLog[Registro: Event Logging]
+    FlowSoporte --> EventLog
+    FlowMixto --> EventLog
+    
+    FlowVentas -.-> UI[LWC / Dashboard Nativo]
+    FlowSoporte -.-> UI
+    FlowMixto -.-> UI
+    
+    classDef agent fill:#512bd4,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef logic fill:#008cc1,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef data fill:#f9ab00,stroke:#fff,stroke-width:2px,color:#111;
+    
+    class Agentforce agent;
+    class TopicVentas,TopicSoporte,TopicMixto,FlowVentas,FlowSoporte,FlowMixto logic;
+    class ObjOpp,ObjCase,RAG,EventLog data;

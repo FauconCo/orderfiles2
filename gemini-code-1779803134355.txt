@@ -1,0 +1,33 @@
+graph TD
+    subgraph Local [Entorno Local - Visual Studio]
+        AWU[Matriz de Ejecución AWU<br/>API Controller port 8080]
+        Auth[Módulo OAuth 2.0 JWT]
+        NgrokAgent[Agente Ngrok Local]
+    end
+
+    subgraph Edge [Ngrok Edge - Región us-cal-1]
+        TLS[Terminación TLS<br/>www.the-faucon.com]
+        Policy[Traffic Policy Engine<br/>HMAC SHA-256 Verifier]
+    end
+
+    subgraph SFDC [Salesforce Ecosystem]
+        DataCloud[(Data Cloud<br/>Anclaje Epistemológico)]
+        TrustLayer{Einstein Trust Layer<br/>Mitigación Workslop}
+        LLM[Motor de Razonamiento ToT]
+        WebhookTarget[Data Action Target<br/>Webhook Dispatcher]
+    end
+
+    %% Flujo de Ingesta (Local -> Cloud)
+    AWU -->|Genera Vector| Auth
+    Auth -->|POST Ingesta Continua JSON| DataCloud
+
+    %% Flujo de Inferencia (Cloud Interno)
+    DataCloud -->|Verdad Absoluta| TrustLayer
+    TrustLayer <-->|Sanitización y Evaluación| LLM
+    TrustLayer -->|Plan Validado| WebhookTarget
+
+    %% Flujo de Ejecución (Cloud -> Edge -> Local)
+    WebhookTarget -->|POST HTTPS + HMAC| TLS
+    TLS --> Policy
+    Policy -->|Si HMAC Válido| NgrokAgent
+    NgrokAgent <-->|Túnel TCP Multiplexado| AWU

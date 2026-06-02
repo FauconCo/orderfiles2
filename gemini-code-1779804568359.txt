@@ -1,0 +1,62 @@
+/visuallogic_alro_workspace/   (Directorio Raíz)
+│
+├── .github/workflows/deploy.yml          ➔ CI/CD: Pipeline de despliegue automatizado a Salesforce.
+├── .eslintrc.json                        ➔ Estándar de calidad de código JS para LWC.
+├── .prettierrc                           ➔ Formateador para legibilidad profesional del código.
+├── jsconfig.json                         ➔ Configuración de entorno de desarrollo para LWC.
+│
+├── /force-app/main/default/              (Ecosistema Nativo Salesforce)
+│   │
+│   ├── /lwc/                             (Frontend Reactivo)
+│   │   ├── /alroDashboardMaster/         (Componente Maestro / Contenedor)
+│   │   │   ├── alroDashboardMaster.html
+│   │   │   ├── alroDashboardMaster.js
+│   │   │   ├── alroDashboardMaster.js-meta.xml
+│   │   │   └── alroDashboardMaster.css
+│   │   ├── /alroSalesView/               (Presentador Ventas)
+│   │   │   ├── alroSalesView.html
+│   │   │   ├── alroSalesView.js
+│   │   │   ├── alroSalesView.js-meta.xml
+│   │   │   └── alroSalesView.css
+│   │   └── /alroSupportView/             (Presentador Soporte)
+│   │       ├── alroSupportView.html
+│   │       ├── alroSupportView.js
+│   │       ├── alroSupportView.js-meta.xml
+│   │       └── alroSupportView.css
+│   │
+│   ├── /flows/
+│   │   └── Master_Agentic_Orchestrator.flow-meta.xml ➔ Flujo orquestador de lógica y auditoría.
+│   │
+│   ├── /objects/
+│   │   ├── /Dashboard_Update__e/         ➔ Bus de eventos (Platform Event).
+│   │   │   ├── Dashboard_Update__e.object-meta.xml
+│   │   │   └── /fields/ (Type__c, DataJSON__c, Confidence__c)
+│   │   └── /Autonomous_Audit_Log__c/     ➔ Registro inmutable de trazabilidad.
+│   │       ├── Autonomous_Audit_Log__c.object-meta.xml
+│   │       └── /fields/ (Intent_Captured__c, Timestamp__c)
+│   │
+│   ├── /knowledge/                       (Capa de Inteligencia RAG)
+│   │   ├── KAV_001_Logica_Facturacion.knowledgeArticleVersion-meta.xml
+│   │   ├── KAV_002_Matriz_Soporte.knowledgeArticleVersion-meta.xml
+│   │   └── KAV_003_Gobernanza.knowledgeArticleVersion-meta.xml
+│   │
+│   ├── /bots/
+│   │   ├── VisualLogic_Agent.bot-meta.xml
+│   │   └── VisualLogic_Agent.botVersion-meta.xml
+│   │
+│   ├── /staticresources/                 (Conexión nativa visual)
+│   │   ├── Use_case_image.webp           ➔ Imagen proporcionada por el reto.
+│   │   └── Figma_Screen_Capture.png      ➔ Evidencia del diseño UX de referencia.
+│   │
+│   └── /permissionsets/                  (Seguridad Profesional)
+│       └── ALRO_Full_Access.permissionset-meta.xml ➔ Permisos de ejecución para el Agente y Flujos.
+│
+├── /docs/                                (Entregables de Hackatón)
+│   ├── DISEÑO_UX_REFERENCIA.md           ➔ Enlace público a tu Figma y guía de diseño.
+│   ├── Guion_Demo_Video_Hackaton.md      ➔ Guion de 2'45" con pruebas de estrés técnico.
+│   └── Documento_Tecnico_ALRO_MVP.docx   ➔ Documento técnico final (académico/profesional).
+│
+└── Raíz (/)
+    ├── package.xml                       ➔ Manifiesto de despliegue maestro.
+    ├── sfdx-project.json                 ➔ Configuración del proyecto SFDX.
+    └── .forceignore                      ➔ Listado de archivos ignorados para el despliegue.

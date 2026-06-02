@@ -1,0 +1,83 @@
+flowchart TB
+    %% Definición de Estilos y Clases %%
+    classDef CapaDato fill:#f8fafc,stroke:#10b981,stroke-width:2px,color:#0f172a;
+    classDef CapaCognitiva fill:#f8fafc,stroke:#14b8a6,stroke-width:2px,color:#0f172a;
+    classDef CapaCalibracion fill:#f8fafc,stroke:#3b82f6,stroke-width:2px,color:#0f172a;
+    classDef CapaSeguridad fill:#f8fafc,stroke:#ef4444,stroke-width:2px,color:#0f172a;
+    classDef CapaEjecucion fill:#f8fafc,stroke:#6366f1,stroke-width:2px,color:#0f172a;
+
+    %% Subgraph: Capa de Datos (Data Cloud)
+    subgraph Capa_Dato
+        A -->|Ingesta Streaming/Batch| B
+        B -->|Mapeo DMO| C
+        C -->|Unificación Sin Copia - Zero Copy| D
+        D -->|Mapeo de Relaciones| E
+        E -->|Federated Grounding| F{Caché de Memoria Jerárquica}
+        F -->|Memoria de Trabajo| F1[KV-Cache Compresible]
+        F -->|Memoria Comprimida| F2
+        F -->|Memoria Arquitectónica| F3
+    end
+
+    %% Subgraph: Capa Cognitiva y Orquestación Extensible
+    subgraph Capa_Cognitiva
+        G -->|Invocación| H
+        H -->|Clasificación Semántica| I
+        I -->|Grounding Contextual| F3
+        I --> J{¿Existe Herramienta/Pipeline?}
+        
+        %% Flujo Daedalus Toolsmith
+        J -- No --> K
+        K --> K1
+        K1 --> K2
+        K2 -->|Fallo de Test| K3
+        K3 --> K2
+        K2 -->|Éxito de Test| K4
+        K4 --> K5
+        
+        K --> S1
+        S1 --> S2[Classification of Multi-Agent Patterns]
+        S2 --> S3
+        K5 & S3 --> L[Invocación de Herramienta Compilada]
+        J -- Sí --> L
+    end
+
+    %% Subgraph: Capa de Calibración Metacognitiva
+    subgraph Capa_Calibracion
+        L --> M
+        M -->|Deception Testing| N
+        N --> O[Agentic Uncertainty Quantification - AUQ]
+        O --> O1
+        O --> O2
+        O1 & O2 --> P[Expected Calibration Error Evaluation - ECE]
+        P --> Q{¿ECE Calibrado & Confianza >= 99.9%?}
+    end
+
+    %% Subgraph: Capa de Seguridad y Control Matemático
+    subgraph Capa_Seguridad
+        Q -- No --> R
+        Q -- Sí --> S
+        S -->|PII Masking & Zero Retention| T[Filtros de Consistencia Matemática]
+        T --> T1[Pérdida Cuantílica: Quantile Loss p90]
+        T --> T2
+    end
+
+    %% Subgraph: Capa de Concurrencia y Ejecución
+    subgraph Capa_Ejecucion [Capa 5: Concurrencia Asíncrona y Ejecución Core]
+        T1 & T2 --> U[Procesamiento Asíncrono: Queueable Apex]
+        U -->|Dynamic Pagination Cursors| V
+        V -->|Ejecución Paralela de AWUs| W
+        W --> X
+        X -->|Retroalimentación de Telemetría| B
+    end
+
+    class Capa_Dato,A,B,C,D,E,F,F1,F2,F3 CapaDato;
+    class Capa_Cognitiva,G,H,I,J,K,K1,K2,K3,K4,K5,S1,S2,S3,L CapaCognitiva;
+    class Capa_Calibracion,M,N,O,O1,O2,P,Q CapaCalibracion;
+    class Capa_Seguridad,R,S,T,T1,T2 CapaSeguridad;
+    class Capa_Ejecucion,U,V,W,X CapaEjecucion;
+
+    style Capa_Dato fill:#f8fafc,stroke:#10b981,stroke-width:2px,color:#0f172a
+    style Capa_Cognitiva fill:#f8fafc,stroke:#14b8a6,stroke-width:2px,color:#0f172a
+    style Capa_Calibracion fill:#f8fafc,stroke:#3b82f6,stroke-width:2px,color:#0f172a
+    style Capa_Seguridad fill:#f8fafc,stroke:#ef4444,stroke-width:2px,color:#0f172a
+    style Capa_Ejecucion fill:#f8fafc,stroke:#6366f1,stroke-width:2px,color:#0f172a

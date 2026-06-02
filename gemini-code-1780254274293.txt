@@ -1,0 +1,39 @@
+INICIO PROCESO ETL_SALESFORCE_NATIVO
+
+  // 1. INFERENCIA DE ESQUEMA (Mapeo Automático de Columnas de Data Cloud KPIs)
+  DEFINIR Diccionario de Inferencia:
+    SI columna contiene ["Category", "Metric Type"] -> MAPEAR A Category__c
+    SI columna contiene ["KPI", "Indicator", "Metric Name"] -> MAPEAR A KPI_Name__c
+    SI columna contiene ["KPI Calculation", "Formula"] -> MAPEAR A KPI_Calculation__c
+    SI columna contiene ["Description", "Summary"] -> MAPEAR A Description__c
+    SI columna contiene ["ROI", "Return on Investment"] -> MAPEAR A ROI_Metric__c
+    SI columna contiene ["ROI Calculation", "ROI Formula"] -> MAPEAR A ROI_Calculation__c
+
+  // 2. AUDITORÍA Y LIMPIEZA DE DATOS (Trust Layer & Normalization)
+  PARA CADA fila EN datos_ingesta:
+    SI fila contiene ["null", "undefined", "N/A"]:
+      DESCARTAR fila (Ignorar para mantener la integridad de los datos)
+    
+    NORMALIZAR texto:
+      ELIMINAR símbolos de tendencia visuales ("↑", "↓")
+      SI Category__c ESTÁ VACÍO:
+        ASIGNAR "Uncategorized Metric"
+
+  // 3. MOTOR DE ENRUTAMIENTO (Prompt Builder Grounding)
+  PARA CADA fila_limpia:
+    INICIALIZAR PromptTemplateType__c = "Standard"
+    INICIALIZAR GroundingSource__c = "Merge Fields"
+    
+    // Validar contexto para Einstein Prompt Builder
+    SI Category__c ES "Sales metrics":
+      PromptInstructions__c = "Write a description no longer than 500 characters focusing on sales pipeline efficiency."
+      GroundingSource__c = "Flows" // Para cálculos dinámicos de Win Rate o Revenue
+      
+    SI Category__c ES "Overall & Employee Engagement Metrics":
+      PromptInstructions__c = "Summarize employee productivity and collaboration effectiveness."
+      GroundingSource__c = "Apex" // Para lógicas complejas de retención
+
+  // 4. INSERCIÓN DML MASIVA
+  INSERTAR_EN_SALESFORCE(DataCloud_KPI_Metric__c)
+
+FIN PROCESO

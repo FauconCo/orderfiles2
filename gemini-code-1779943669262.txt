@@ -1,0 +1,5 @@
+# Instalar Salesforce CLI globalmente
+npm install @salesforce/cli --global
+
+# Verificar la instalación
+sf --version

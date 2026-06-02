@@ -1,0 +1,20 @@
+stateDiagram-v2
+    [*] --> Recepción_Prompt: "Voz / Texto del Director"
+    
+    Recepción_Prompt --> Evaluación_Matemática: Análisis de Intención
+    
+    state Evaluación_Matemática {
+        [*] --> Límite_Certidumbre
+        Límite_Certidumbre --> Tanh_Freno: Aplica límite [-1, 1]
+    }
+    
+    Evaluación_Matemática --> Topic_Ventas: Similitud > 0.85 (Oportunidades)
+    Evaluación_Matemática --> Topic_Soporte: Similitud > 0.85 (Casos/Prioridad)
+    Evaluación_Matemática --> Topic_Combinado: Similitud > 0.85 (Vista 360°)
+    
+    Evaluación_Matemática --> Human_in_the_loop: Similitud < 0.85 (Ej. "Clima")
+    
+    Topic_Ventas --> [*]
+    Topic_Soporte --> [*]
+    Topic_Combinado --> [*]
+    Human_in_the_loop --> [*]: "Delega a Humano"

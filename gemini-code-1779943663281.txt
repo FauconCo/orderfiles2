@@ -1,0 +1,39 @@
+graph TD
+    subgraph Capa 4: Proyecto Local
+        LWC[Lightning Web Components - Frontend]
+        Apex[Apex Classes - Backend]
+    end
+
+    subgraph Capa 3: IDE y Extensiones
+        VSC[Visual Studio Code]
+        SF_Ext[Salesforce Extension Pack]
+        RedHat[Language Support for Java by Red Hat]
+        
+        VSC --> SF_Ext
+        SF_Ext --> RedHat
+    end
+
+    subgraph Capa 2: Herramientas CLI
+        SFCLI[Salesforce CLI - @salesforce/cli]
+    end
+
+    subgraph Capa 1: Runtimes y Motores Base
+        Node[Node.js LTS + NPM]
+        JDK[Eclipse Temurin JDK 17]
+    end
+
+    %% Relaciones de dependencia
+    LWC -.-> SFCLI
+    Apex -.-> SFCLI
+    SFCLI --> Node
+    RedHat --> JDK
+    
+    classDef base fill:#1e3a8a,stroke:#3b82f6,color:#fff;
+    classDef cli fill:#047857,stroke:#10b981,color:#fff;
+    classDef ide fill:#b45309,stroke:#f59e0b,color:#fff;
+    classDef proj fill:#4c1d95,stroke:#8b5cf6,color:#fff;
+
+    class Node,JDK base;
+    class SFCLI cli;
+    class VSC,SF_Ext,RedHat ide;
+    class LWC,Apex proj;

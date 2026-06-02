@@ -1,0 +1,21 @@
+graph TD
+    subgraph Frontend [Vercel Deployment]
+        A[Interactive Dashboard ALRO v2] -->|REST / JSON| B(Vercel Edge API)
+    end
+
+    subgraph Middleware [Visual Studio Code Local]
+        B <-->|ngrok tunnel| C[API Gateway / Router]
+        C -->|Sync| D[(Local State / Cache)]
+    end
+
+    subgraph Backend Engine [Google Colab]
+        C <-->|ngrok tunnel| E[Macro-Agente Orquestador]
+        E --> F[Micro-Agente 1: Anclaje SF]
+        E --> G[Micro-Agente 2: ToT Reasoner]
+        E --> H[Micro-Agente 3: Anti-Workslop]
+        E --> I[Micro-Agente 4: AWU Executor]
+    end
+
+    subgraph Truth [Salesforce Data Cloud]
+        F <-->|SOQL / API| J[(SF Database)]
+    end

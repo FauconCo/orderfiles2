@@ -1,0 +1,6 @@
+// Implementación nativa de paginación para el Scatter-Gather de ALRO v4.0
+PaginationCursor myCursor = Database.getApexPaginationCursor(myQuery);
+while (myCursor.hasNext()) {
+    List<SObject> chunk = myCursor.next();
+    // Procesar subtarea asíncrona de manera segura dentro de los límites de la CPU
+}

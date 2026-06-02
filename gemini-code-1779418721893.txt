@@ -1,0 +1,13 @@
+stateDiagram-v2
+    [*] --> Idle: Inicialización
+    Idle --> Processing: Enviar IntentVector
+    Processing --> Processing: Validación de ToT
+    
+    Processing --> Unlearning: Alucinación Detectada (HTTP 406)
+    Unlearning --> Idle: Purga Completada (Notificación UI)
+    
+    Processing --> Success: AWU_Ledger Registrado
+    Success --> Idle: Actualización Dashboard
+    
+    Processing --> Error: Timeout/Fallo Sistema
+    Error --> Idle: Reset Manual

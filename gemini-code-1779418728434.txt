@@ -1,0 +1,42 @@
+classDiagram
+    class IntentVector {
+        +String intent_id
+        +String client_data_ref
+        +Dict business_rules
+    }
+
+    class AWUResult {
+        +String awu_id
+        +Float functional_equivalence_score
+        +Dict roi_metrics
+    }
+
+    class ALROOrchestrator {
+        -Dict agentic_memory
+        +execute_visual_logics(intent: IntentVector) AWUResult
+    }
+
+    class SFEpistemologicalAnchor {
+        +extract_ground_truth(ref: String) Dict
+    }
+
+    class ToTReasoner {
+        +evaluate_branches(truth: Dict) Dict
+    }
+
+    class AntiWorkslopFilter {
+        +validate_or_purge(decision: Dict, context_id: String) Boolean
+        -execute_machine_unlearning(context_id: String) void
+    }
+
+    class AWUExecutor {
+        +package_work_unit(decision: Dict) AWUResult
+    }
+    
+    %% Relaciones y Multiplicidad
+    ALROOrchestrator ..> IntentVector : "Recibe"
+    ALROOrchestrator ..> AWUResult : "Retorna"
+    ALROOrchestrator --> SFEpistemologicalAnchor : "1..1 (Delega)"
+    ALROOrchestrator --> ToTReasoner : "1..1 (Coordina)"
+    ALROOrchestrator --> AntiWorkslopFilter : "1..1 (Valida)"
+    ALROOrchestrator --> AWUExecutor : "1..1 (Empaqueta)"

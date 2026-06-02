@@ -1,0 +1,6 @@
+# 1. Instalar Node.js (Versión LTS para máxima estabilidad)
+winget install OpenJS.NodeJS.LTS
+
+# 2. Instalar Java JDK 17 (Eclipse Temurin/Adoptium)
+# Es vital porque es la versión más ligera y certificada para extensiones de VS Code
+winget install EclipseAdoptium.Temurin.17.JDK

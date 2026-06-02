@@ -1,0 +1,25 @@
+graph TD
+    %% Nodos
+    UI[Frontend: React/Next.js\nHosted on Vercel]
+    BFF[Backend API: Visual Studio\n.NET Core / Node.js]
+    SF[(Salesforce API\nREST/SOQL)]
+    N4J[(Neo4j Aura\nGraph DB - Cypher)]
+    COLAB[[Google Colab\nMath/ML Engine\nFastAPI + ngrok]]
+
+    %% Relaciones
+    UI -- 1. Petición HTTP GET/POST --> BFF
+    BFF -- 2. Consulta/Sincronización --> SF
+    BFF -- 3. Lectura/Escritura Subgrafos --> N4J
+    BFF -- 4. Envío de Vectores/Tensores --> COLAB
+    COLAB -- 5. Retorno de Resultados Math --> BFF
+    BFF -- 6. Payload JSON Agregado --> UI
+
+    classDef frontend fill:#000,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef backend fill:#512bd4,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef db fill:#008cc1,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef ml fill:#f9ab00,stroke:#fff,stroke-width:2px,color:#111;
+    
+    class UI frontend;
+    class BFF backend;
+    class SF,N4J db;
+    class COLAB ml;

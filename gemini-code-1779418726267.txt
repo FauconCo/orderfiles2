@@ -1,0 +1,40 @@
+sequenceDiagram
+    autonumber
+    actor Cliente as Dashboard (Vercel)
+    participant Orq as :ALROOrchestrator
+    participant SF as :SFEpistemologicalAnchor
+    participant ToT as :ToTReasoner
+    participant AWS as :AntiWorkslopFilter
+    participant AWU as :AWUExecutor
+
+    Cliente->>Orq: POST execute_visual_logics(IntentVector)
+    activate Orq
+    
+    Orq->>SF: extract_ground_truth(client_data_ref)
+    activate SF
+    SF-->>Orq: ground_truth_data (Data Cloud)
+    deactivate SF
+    
+    Orq->>ToT: evaluate_branches(ground_truth_data)
+    activate ToT
+    ToT-->>Orq: raw_decision + confidence_score
+    deactivate ToT
+    
+    Orq->>AWS: validate_or_purge(raw_decision, intent_id)
+    activate AWS
+    
+    alt confidence_score < 0.94
+        AWS->>AWS: execute_machine_unlearning()
+        Note over AWS: Purgado O(1) en RAM < 100ms
+        AWS-->>Orq: False (Alucinación)
+        Orq-->>Cliente: 406 Not Acceptable (Workslop Purged)
+    else confidence_score >= 0.94
+        AWS-->>Orq: True (Válido)
+        Orq->>AWU: package_work_unit(raw_decision)
+        activate AWU
+        AWU-->>Orq: AWUResult
+        deactivate AWU
+        Orq-->>Cliente: 200 OK (AWUResult)
+    end
+    deactivate AWS
+    deactivate Orq

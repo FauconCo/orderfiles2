@@ -1,0 +1,34 @@
+sequenceDiagram
+    autonumber
+    actor Director
+    participant Agent as Agentforce (Topic Classifier)
+    participant Flow as Autolaunched Flow (Action)
+    participant SF_DB as Salesforce DB (Opps/Cases)
+    participant Audit as Objeto: Autonomous_Audit_Log__c
+    participant PE as Platform Event (Dashboard_Update__e)
+    participant LWC as UI: Dashboard Components (empApi)
+
+    Director->>Agent: "Muestra ventas de este trimestre" (Input ruidoso)
+    Agent->>Flow: Invoca Acción con Parámetros (Ej. Rango de Fechas)
+    
+    rect rgb(40, 40, 60)
+        Note over Flow: Capa de Tolerancia a Fallos (Sanitización)
+        Flow->>Flow: Decision Node: ¿Input de fecha es Null o Inválido?
+        Flow-->>Flow: Si es inválido -> Asignar Variable = THIS_QUARTER
+    end
+    
+    Flow->>SF_DB: SOQL Get Records (Oportunidades)
+    
+    alt Error en Base de Datos (Timeout/Locks)
+        SF_DB--xFlow: Error de ejecución
+        Flow->>Agent: Fault Path: "Los datos están bloqueados temporalmente."
+        Agent->>Director: Genera respuesta de disculpa elegante.
+    else Datos recuperados con éxito
+        SF_DB-->>Flow: Colección de Registros
+        Flow->>Audit: Insertar Registro (UserId, Intent, Timestamp)
+        Flow->>PE: Publicar Evento (Payload: JSON/Ids, Tipo: 'Ventas')
+        PE-->>LWC: Interceptado vía `empApi` (WebSocket nativo)
+        LWC->>LWC: Re-renderiza gráficos dinámicamente < 200ms
+        Flow-->>Agent: Retorna Output: "Éxito. Dashboard actualizado."
+        Agent->>Director: "He actualizado tu tablero de ventas."
+    end

@@ -1,0 +1,9 @@
+[VS Code App] --> (HTTP POST) --> [MuleSoft Anypoint]
+                                        |
+          --------------------------------------------------
+          |                             |                  |
+    [Salesforce Knowledge]      [Salesforce Data Cloud]   [Audit Log Object]
+          |                             |                  |
+          --------------------------------------------------
+                                        |
+[Respuesta JSON Estructurada] <-- [Salesforce Apex] <-- [MuleSoft]
