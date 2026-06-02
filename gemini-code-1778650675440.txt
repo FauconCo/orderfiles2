@@ -1,1 +1,0 @@
-.\ngrok.exe http 8080 --basic-auth="jurado:santander2026"
